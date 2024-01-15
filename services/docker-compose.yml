@@ -24,12 +24,12 @@ services:
       DB_NAME: mailer-db
       JOB_POLL_INTERVAL_MS: 5000
       JOB_WAIT_MS: 1000
-      SENDER_HOST: smtp.gmail.com
-      SENDER_PORT: 587
-      SENDER_SECURE: false
-      SENDER_SERVICE: gmail
-      SENDER_ADDRESS: scazares.dev@gmail.com
-      SENDER_PASS: vxpn wpxg ffqy kvao
+      SENDER_HOST: ${MAIL_SENDER_HOST}
+      SENDER_PORT: ${MAIL_SENDER_PORT}
+      SENDER_SECURE: ${MAIL_SENDER_SECURE}
+      SENDER_SERVICE: ${MAIL_SENDER_SERVICE}
+      SENDER_ADDRESS: ${MAIL_SENDER_ADDRESS}
+      SENDER_PASS: ${MAIL_SENDER_PASS}
     env_file:
       - .env
     networks:
