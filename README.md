@@ -36,7 +36,7 @@ Deploy the docker compose file:
 
 `sudo docker-compose up -d`
 
-That's it, you should be able to see the Docker containers are running, either from the terminal or from the Portainer web interface:
+That's it, you should be able to see the Docker containers running, either from the terminal or from the Portainer web interface:
 
 `sudo docker ps`
 
