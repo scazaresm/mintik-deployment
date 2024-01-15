@@ -1,8 +1,7 @@
 version: '3'
-
 services:
   authentication:
-    image: scazares/mintik-authentication-service:latest
+    build: scazares/mintik-authentication-service:latest
     depends_on:
       - mongodb
     environment:
@@ -15,15 +14,16 @@ services:
       - app-network
 
   mailer:
-    image: scazares/mintik-mailer-service:latest
+    build: scazares/mintik-mailer-service:latest
     depends_on:
       - mongodb
       - authentication
     environment:
       APP_PORT: 3005
+      APP_DIR: ${CONTAINER_APP_PATH}
       DB_NAME: mailer-db
-      POLL_INTERVAL_MS: 5000
-      WAIT_MS: 1000
+      JOB_POLL_INTERVAL_MS: 5000
+      JOB_WAIT_MS: 1000
       SENDER_HOST: smtp.gmail.com
       SENDER_PORT: 587
       SENDER_SECURE: false
@@ -36,29 +36,33 @@ services:
       - app-network
 
   mech-sync:
-    image: scazares/mintik-mech-sync-service:latest
+    build: scazares/mintik-mech-sync-service:latest
     volumes:
-      - /home/sergio/MECH:/usr/src/app/MECH
+      - ${SERVER_MECH_PATH}:${CONTAINER_MECH_PATH} 
     depends_on:
       - mongodb
       - authentication
       - mailer
     environment:
       APP_PORT: 3010
-      DB_NAME: mechanical-sync-db
-      APP_DIR: /usr/src/app
-      MECH_DIR: /usr/src/app/MECH
+      DB_NAME: mech-sync-db
+      APP_DIR: ${CONTAINER_APP_PATH}
+      MECH_DIR: ${CONTAINER_MECH_PATH}    
+      JOB_POLL_INTERVAL_MS: 5000
+      JOB_WAIT_MS: 1000
     env_file:
       - .env
+    mem_limit: "8g"
+    mem_reservation: "1g"
     networks:
-      - app-network
+      - app-network    
 
   mongodb:
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - /home/sergio/mongodb-data:/data/db
+      - ${SERVER_DB_PATH}:/data/db
     env_file:
       - .env
     networks:
@@ -68,15 +72,15 @@ services:
     image: nginx:latest
     container_name: api-gateway
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - //./pipe/docker_engine:/tmp/docker.sock:ro
     depends_on:
       - mongodb
       - authentication
-      - mech-sync
       - mailer
+      - mech-sync
     networks:
       - app-network
 
