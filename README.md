@@ -1,6 +1,6 @@
 # Introduction
 
-This repository contains the required scripts to deploy the **Mintik** backend services into your own server. It also contains the client binaries that will be used for alpha testing.
+This repository contains the required scripts to deploy the **Mintik** backend services into your own server. It also contains the client app binaries that will be used for alpha testing.
 
 # Prerequisites
 
