@@ -1,7 +1,7 @@
 version: '3'
 services:
   authentication:
-    build: scazares/mintik-authentication-service:latest
+    image: scazares/mintik-authentication-service:latest
     depends_on:
       - mongodb
     environment:
@@ -14,7 +14,7 @@ services:
       - app-network
 
   mailer:
-    build: scazares/mintik-mailer-service:latest
+    image: scazares/mintik-mailer-service:latest
     depends_on:
       - mongodb
       - authentication
@@ -36,7 +36,7 @@ services:
       - app-network
 
   mech-sync:
-    build: scazares/mintik-mech-sync-service:latest
+    image: scazares/mintik-mech-sync-service:latest
     volumes:
       - ${SERVER_MECH_PATH}:${CONTAINER_MECH_PATH} 
     depends_on:
